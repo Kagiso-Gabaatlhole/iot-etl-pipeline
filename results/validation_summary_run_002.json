@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "run_id": "run_002",
+  "started_at": "2026-10-29T00:31:23",
+  "pipeline": {
+    "name": "iot-telemetry-etl",
+    "version": "1.0.0",
+    "config_path": "C:\\Users\\Asus\\Documents\\Default Project\\github-projects\\iot-etl-pipeline\\config\\pipeline_config.json"
+  },
+  "abort_on_error": false,
+  "source_files": [
+    {
+      "path": "C:\\Users\\Asus\\Documents\\Default Project\\github-projects\\iot-etl-pipeline\\data\\raw\\iot_readings.csv",
+      "sha256": "6b11dbdd9d0e1604a7010f33772d243ab6df0e2e5f2580fa0d9a46a98a44110c",
+      "row_count": 120000
+    },
+    {
+      "path": "C:\\Users\\Asus\\Documents\\Default Project\\github-projects\\iot-etl-pipeline\\data\\raw\\device_registry.csv",
+      "sha256": "84ae45badb6a0fb99908fc6fdc97f7491cf577386b10a87eb4c7d2bf6fe44a62",
+      "row_count": 25
+    }
+  ],
+  "validation": {
+    "status": "fail",
+    "rows_total": 120000,
+    "evaluated_at": "2026-10-29T00:31:23",
+    "rules_evaluated": 15,
+    "error_violations": 1840,
+    "warn_violations": 8486,
+    "rejected_rows": 1200,
+    "flagged_rows": 8318,
+    "rules": [
+      {
+        "id": "VR001",
+        "description": "reading_id must not be empty",
+        "field": "reading_id",
+        "severity": "error",
+        "predicate": {
+          "type": "not_null"
+        },
+        "violations": 28
+      },
+      {
+        "id": "VR002",
+        "description": "device_id must not be empty",
+        "field": "device_id",
+        "severity": "error",
+        "predicate": {
+          "type": "not_null"
+        },
+        "violations": 0
+      },
+      {
+        "id": "VR003",
+        "description": "timestamp must not be empty",
+        "field": "timestamp",
+        "severity": "error",
+        "predicate": {
+          "type": "not_null"
+        },
+        "violations": 118
+      },
+      {
+        "id": "VR004",
+        "description": "timestamp must be a valid ISO-8601 datetime (YYYY-MM-DDTHH:MM:SS)",
+        "field": "timestamp",
+        "severity": "error",
+        "predicate": {
+          "type": "iso_datetime"
+        },
+        "violations": 144
+      },
+      {
+        "id": "VR005",
+        "description": "timestamp must not be in the future",
+        "field": "timestamp",
+        "severity": "error",
+        "predicate": {
+          "type": "not_future"
+        },
+        "violations": 344
+      },
+      {
+        "id": "VR006",
+        "description": "device_id must exist in the device registry",
+        "field": "device_id",
+        "severity": "error",
+        "predicate": {
+          "type": "in_set",
+          "source": "known_device_ids"
+        },
+        "violations": 100
+      },
+      {
+        "id": "VR007",
+        "description": "temperature_c must be numeric",
+        "field": "temperature_c",
+        "severity": "error",
+        "predicate": {
+          "type": "numeric"
+        },
+        "violations": 34
+      },
+      {
+        "id": "VR008",
+        "description": "temperature_c must be within -40..60 degrees Celsius",
+        "field": "temperature_c",
+        "severity": "error",
+        "predicate": {
+          "type": "range",
+          "min": -40,
+          "max": 60
+        },
+        "violations": 149
+      },
+      {
+        "id": "VR009",
+        "description": "humidity_pct must be numeric",
+        "field": "humidity_pct",
+        "severity": "error",
+        "predicate": {
+          "type": "numeric"
+        },
+        "violations": 196
+      },
+      {
+        "id": "VR010",
+        "description": "humidity_pct must be within 0..100 percent",
+        "field": "humidity_pct",
+        "severity": "error",
+        "predicate": {
+          "type": "range",
+          "min": 0,
+          "max": 100
+        },
+        "violations": 330
+      },
+      {
+        "id": "VR011",
+        "description": "power_kw must be numeric",
+        "field": "power_kw",
+        "severity": "error",
+        "predicate": {
+          "type": "numeric"
+        },
+        "violations": 148
+      },
+      {
+        "id": "VR012",
+        "description": "power_kw must be within 0..15 kW (negative power is impossible)",
+        "field": "power_kw",
+        "severity": "error",
+        "predicate": {
+          "type": "range",
+          "min": 0,
+          "max": 15
+        },
+        "violations": 249
+      },
+      {
+        "id": "VR013",
+        "description": "temperature_c above 45 C (or not evaluable as a number)",
+        "field": "temperature_c",
+        "severity": "warn",
+        "predicate": {
+          "type": "range",
+          "max": 45
+        },
+        "violations": 2848
+      },
+      {
+        "id": "VR014",
+        "description": "humidity_pct above 95 percent (or not evaluable as a number)",
+        "field": "humidity_pct",
+        "severity": "warn",
+        "predicate": {
+          "type": "range",
+          "max": 95
+        },
+        "violations": 3838
+      },
+      {
+        "id": "VR015",
+        "description": "exact duplicate reading row (all columns identical)",
+        "field": null,
+        "severity": "warn",
+        "predicate": {
+          "type": "unique"
+        },
+        "violations": 1800
+      }
+    ]
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "notes": "Declarative validation rule catalogue for the IoT telemetry pipeline. Each rule: id, description, field, severity (error|warn) and a predicate. Predicates: not_null, numeric, range (min/max inclusive), iso_datetime (YYYY-MM-DDTHH:MM:SS), not_future (vs wall clock), in_set (values or context source), unique (exact duplicate row). error -> row is quarantined; warn -> row is loaded and flagged.",
+  "rules": [
+    {
+      "id": "VR001",
+      "description": "reading_id must not be empty",
+      "field": "reading_id",
+      "severity": "error",
+      "predicate": { "type": "not_null" }
+    },
+    {
+      "id": "VR002",
+      "description": "device_id must not be empty",
+      "field": "device_id",
+      "severity": "error",
+      "predicate": { "type": "not_null" }
+    },
+    {
+      "id": "VR003",
+      "description": "timestamp must not be empty",
+      "field": "timestamp",
+      "severity": "error",
+      "predicate": { "type": "not_null" }
+    },
+    {
+      "id": "VR004",
+      "description": "timestamp must be a valid ISO-8601 datetime (YYYY-MM-DDTHH:MM:SS)",
+      "field": "timestamp",
+      "severity": "error",
+      "predicate": { "type": "iso_datetime" }
+    },
+    {
+      "id": "VR005",
+      "description": "timestamp must not be in the future",
+      "field": "timestamp",
+      "severity": "error",
+      "predicate": { "type": "not_future" }
+    },
+    {
+      "id": "VR006",
+      "description": "device_id must exist in the device registry",
+      "field": "device_id",
+      "severity": "error",
+      "predicate": { "type": "in_set", "source": "known_device_ids" }
+    },
+    {
+      "id": "VR007",
+      "description": "temperature_c must be numeric",
+      "field": "temperature_c",
+      "severity": "error",
+      "predicate": { "type": "numeric" }
+    },
+    {
+      "id": "VR008",
+      "description": "temperature_c must be within -40..60 degrees Celsius",
+      "field": "temperature_c",
+      "severity": "error",
+      "predicate": { "type": "range", "min": -40, "max": 60 }
+    },
+    {
+      "id": "VR009",
+      "description": "humidity_pct must be numeric",
+      "field": "humidity_pct",
+      "severity": "error",
+      "predicate": { "type": "numeric" }
+    },
+    {
+      "id": "VR010",
+      "description": "humidity_pct must be within 0..100 percent",
+      "field": "humidity_pct",
+      "severity": "error",
+      "predicate": { "type": "range", "min": 0, "max": 100 }
+    },
+    {
+      "id": "VR011",
+      "description": "power_kw must be numeric",
+      "field": "power_kw",
+      "severity": "error",
+      "predicate": { "type": "numeric" }
+    },
+    {
+      "id": "VR012",
+      "description": "power_kw must be within 0..15 kW (negative power is impossible)",
+      "field": "power_kw",
+      "severity": "error",
+      "predicate": { "type": "range", "min": 0, "max": 15 }
+    },
+    {
+      "id": "VR013",
+      "description": "temperature_c above 45 C (or not evaluable as a number)",
+      "field": "temperature_c",
+      "severity": "warn",
+      "predicate": { "type": "range", "max": 45 }
+    },
+    {
+      "id": "VR014",
+      "description": "humidity_pct above 95 percent (or not evaluable as a number)",
+      "field": "humidity_pct",
+      "severity": "warn",
+      "predicate": { "type": "range", "max": 95 }
+    },
+    {
+      "id": "VR015",
+      "description": "exact duplicate reading row (all columns identical)",
+      "field": null,
+      "severity": "warn",
+      "predicate": { "type": "unique" }
+    }
+  ]
+}

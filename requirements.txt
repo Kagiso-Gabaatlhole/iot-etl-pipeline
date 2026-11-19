@@ -1,0 +1,6 @@
+# Runtime dependency (everything else is Python 3.12 standard library:
+# csv, json, sqlite3, argparse, logging, hashlib, datetime).
+pandas>=2.2,<3.0
+
+# Test dependency.
+pytest>=8.0

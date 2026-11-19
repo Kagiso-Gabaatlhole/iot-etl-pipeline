@@ -1,0 +1,19 @@
+{
+  "pipeline_name": "iot-telemetry-etl",
+  "version": "1.0.0",
+  "paths": {
+    "readings_csv": "data/raw/iot_readings.csv",
+    "device_registry_csv": "data/raw/device_registry.csv",
+    "validation_rules": "config/validation_rules.json",
+    "warehouse_db": "data/warehouse.db",
+    "results_dir": "results",
+    "logs_dir": "logs",
+    "quarantine_dir": "data/quarantine"
+  },
+  "validation": {
+    "abort_on_error": false
+  },
+  "logging": {
+    "level": "INFO"
+  }
+}
